@@ -33,8 +33,6 @@ auth.onAuthStateChanged(user => {
     }
 });
 
-
-
 ///// Firestore /////
 
 const db = firebase.firestore();
@@ -51,13 +49,14 @@ auth.onAuthStateChanged(user => {
     if (user) {
 
         // Database Reference
-        thingsRef = db.collection('things')
+        thingsRef = db.collection('things') // Reference to the data base. 
 
         createThing.onclick = () => {
 
             const { serverTimestamp } = firebase.firestore.FieldValue;
 
             thingsRef.add({
+                // uid: 'imposter',
                 uid: user.uid,
                 name: faker.commerce.productName(),
                 createdAt: serverTimestamp()
@@ -65,7 +64,8 @@ auth.onAuthStateChanged(user => {
         }
 
 
-        // Query
+        // Query // Listening to back end changes, eg here the adding of an item above. 
+        //onSnapshot runs when data changes. 
         unsubscribe = thingsRef
             .where('uid', '==', user.uid)
             .orderBy('createdAt') // Requires a query
